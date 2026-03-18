@@ -2,9 +2,19 @@
 
 A high-performance, lightweight image gallery application for macOS. It provides a modern "Pinterest-style" masonry interface for browsing local image collections with blazing-fast preview generation.
 
+## � Download & Installations
+
+| Edition | Package | Requirement | Installation |
+| :--- | :--- | :--- | :--- |
+| **Full (Portable)** | [🚀 Download ZIP](https://github.com/Ekachakra-das/Gallery_Preview/releases/latest/download/Gallery_Preview_Full.zip) | Standalone (macOS 12+) | Unzip & Move to your Photo folder |
+| **Lite (Minimal)** | [⚡ Download ZIP](https://github.com/Ekachakra-das/Gallery_Preview/releases/latest/download/Gallery_Preview_Lite.zip) | `pip install pywebview` | Best for developers |
+
+> [!TIP]
+> **Portable by Design**: You don't need to install this to `/Applications`. For best experience, keep the `Gallery Preview.app` directly in your main photography folder or on your external drive.
+
 ## 🚀 Getting Started
 **Option A (Standalone)**  
-Download and open. Everything is included!
+Download the Full version, unzip, and open. Everything is included!
 
 **Option B (Lite)**  
 If you are using the Lite version, just install the library: `pip3 install pywebview`.
