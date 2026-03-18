@@ -6,8 +6,8 @@ A high-performance, lightweight image gallery application for macOS. It provides
 
 | Edition | Package | Requirement | Installation |
 | :--- | :--- | :--- | :--- |
-| **Full (Portable)** (~9.3 MB) | [🚀 Download DMG](https://github.com/Ekachakra-das/Gallery_Preview/releases/latest/download/Gallery_Preview_Full.dmg) | Standalone (macOS 12+) | Open DMG & Drag to your Photo folder |
-| **Lite (Minimal)** (~204 KB) | [⚡ Download DMG](https://github.com/Ekachakra-das/Gallery_Preview/releases/latest/download/Gallery_Preview_Lite.dmg) | `pip install pywebview` | Best for developers |
+| **Full (Portable)** (~9.3 MB) | [🚀 Download DMG](https://github.com/Ekachakra-das/Gallery_Preview/releases/download/v1.0.0/Gallery_Preview_Full.dmg) | Standalone (macOS 12+) | Open DMG & Drag to your Photo folder |
+| **Lite (Minimal)** (~204 KB) | [⚡ Download DMG](https://github.com/Ekachakra-das/Gallery_Preview/releases/download/v1.0.0/Gallery_Preview_Lite.dmg) | `pip install pywebview` | Best for developers |
 
 > [!TIP]
 > **Portable by Design**: You don't need to install this to `/Applications`. For best experience, keep the `Gallery Preview.app` directly in your main photography folder or on your external drive.
