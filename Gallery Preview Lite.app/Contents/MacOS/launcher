@@ -1,3 +1,0 @@
-#!/bin/bash
-DIR="$(cd "$(dirname "$0")" && pwd)"
-exec /opt/homebrew/bin/python3 "$DIR/../Resources/launcher.py"

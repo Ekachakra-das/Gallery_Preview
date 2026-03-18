@@ -1,5 +1,3 @@
-dist/
-*.dmg
 .DS_Store
 __pycache__/
 *.pyc
