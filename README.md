@@ -14,10 +14,10 @@ A high-performance, lightweight image gallery application for macOS. It provides
 
 ## 🚀 Getting Started
 **Option A (Standalone)**  
-Download the Full version, unzip, and open. Everything is included!
+Download the Full version, copy to folder with you pictures and open.
 
 **Option B (Lite)**  
-If you are using the Lite version, just install the library: `pip3 install pywebview`.
+If you are using the Lite version, you need to install the library: `pip3 install pywebview`.
 
 <p align="center">
   <a href="https://github.com/user-attachments/assets/771f4fff-1420-4979-b816-2c30cbe0e302">
