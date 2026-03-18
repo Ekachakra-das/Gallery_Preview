@@ -1,4 +1,4 @@
-# Gallery Preview
+# Gallery Preview for macOS
 
 A high-performance, lightweight image gallery application for macOS. It provides a modern "Pinterest-style" masonry interface for browsing local image collections with blazing-fast preview generation.
 
