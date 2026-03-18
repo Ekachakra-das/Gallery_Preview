@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery Preview</title>
+  <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+  <link rel="stylesheet" href="/static/app.css" />
+  <script>
+    // Quick blocking script to prevent theme/sidebar "jump"
+    (function() {
+      const theme = localStorage.getItem('gallery_theme_mode') || 'auto';
+      if (theme === 'dark' || (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+      
+      const sidebarCollapsed = localStorage.getItem('gallery_sidebar_collapsed') === '1';
+      const autoGallery = localStorage.getItem('gallery_auto_gallery_mode') === '1';
+      
+      document.addEventListener('DOMContentLoaded', () => {
+        if (sidebarCollapsed) {
+          document.querySelector('.app')?.classList.add('sidebar-collapsed');
+          if (autoGallery) document.getElementById('fullscreenGallery')?.classList.add('sidebar-collapsed');
+        }
+        if (autoGallery) {
+          document.getElementById('fullscreenGallery').hidden = false;
+        }
+      });
+    })();
+  </script>
+</head>
+<body>
+  <div class="app">
+    <aside class="panel sidebar">
+      <div class="sidebar-head">
+        <div>
+          <div class="title">Gallery</div>
+        </div>
+        <button id="sidebarToggle" class="sidebar-toggle" aria-label="Toggle sidebar">‹</button>
+      </div>
+      <div class="tree-wrap">
+        <ul id="folderTree" class="tree"></ul>
+      </div>
+    </aside>
+    <div id="sidebarResizer" class="sidebar-resizer"></div>
+    <section class="panel main">
+      <header class="main-head">
+        <div class="main-head-left">
+          <div id="folderTitle">Select a folder</div>
+        </div>
+        <div id="meta"></div>
+      </header>
+      <div id="content" class="content">
+        <div class="status">Choose a folder on the left</div>
+      </div>
+    </section>
+  </div>
+
+  <div id="lightbox" class="lightbox">
+    <button id="prevBtn" class="nav-btn nav-prev" aria-label="Previous">‹</button>
+    <button id="nextBtn" class="nav-btn nav-next" aria-label="Next">›</button>
+    <button id="closeBtn" class="close-btn" aria-label="Close">×</button>
+    <img id="lightboxImage" alt="" />
+    <div id="lightboxInfo" class="lightbox-info" hidden>
+      <div class="lightbox-info-content">
+        <div class="lightbox-info-name" id="lightboxInfoName"></div>
+        <div class="lightbox-info-details">
+          <span id="lightboxInfoSize"></span>
+          <span class="lightbox-info-separator">•</span>
+          <span id="lightboxInfoPath"></span>
+        </div>
+      </div>
+      <div class="lightbox-info-actions">
+        <button id="lightboxInfoCopy" class="lightbox-info-btn" title="Copy to clipboard (⌘C)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+        </button>
+        <button id="lightboxInfoReveal" class="lightbox-info-btn" title="Reveal in Finder">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div id="lightboxGallery" class="lightbox-gallery" hidden>
+      <div id="lightboxGalleryContent" class="lightbox-gallery-content"></div>
+    </div>
+  </div>
+
+  <div id="fullscreenGallery" class="fullscreen-gallery" hidden>
+    <div id="fullscreenGallerySidebar" class="fullscreen-gallery-sidebar"></div>
+    <div id="fullscreenGallerySidebarTrigger" class="fullscreen-gallery-sidebar-trigger"></div>
+    <div id="fullscreenGalleryContent" class="fullscreen-gallery-content"></div>
+  </div>
+
+  <div class="settings-panel">
+    <div class="settings-row">
+      <button id="settingsToggle" class="settings-toggle" aria-label="Settings">⚙</button>
+      <button id="galleryModeBtn" class="settings-toggle" title="Gallery Mode (G)" aria-label="Gallery Mode">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="exit-hint" id="exitHint">^Q Exit</div>
+    <div id="settingsMenu" class="settings-menu" hidden>
+      <div class="settings-group">
+        <label class="settings-label">Theme</label>
+        <div class="theme-buttons">
+          <button data-theme-mode="auto" class="theme-option theme-option-text" title="Auto" aria-label="Auto theme">
+            Auto
+          </button>
+          <button data-theme-mode="light" class="theme-option" title="Light" aria-label="Light theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+          <button data-theme-mode="dark" class="theme-option" title="Dark" aria-label="Dark theme">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="settings-divider"></div>
+      <div class="settings-group">
+        <label class="settings-checkbox">
+          <input type="checkbox" id="hideFilenames" />
+          <span>Hide filenames</span>
+        </label>
+      </div>
+      <div class="settings-group">
+        <label class="settings-checkbox">
+          <input type="checkbox" id="hideEmptyFolders" />
+          <span>Hide folders without images</span>
+        </label>
+      </div>
+      <div class="settings-group">
+        <label class="settings-checkbox">
+          <input type="checkbox" id="autoGalleryMode" />
+          <span>Open in gallery mode by default</span>
+        </label>
+      </div>
+      <div class="settings-divider"></div>
+      <div class="settings-group">
+        <label class="settings-label">Image Size</label>
+        <input type="range" id="imageSizeSlider" class="image-size-slider" min="1" max="5" value="3" />
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>
